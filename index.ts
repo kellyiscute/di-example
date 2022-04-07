@@ -1,6 +1,7 @@
 import { bootstrap } from "./bootstrap";
 import { Controller, Inject, Injectable, Module } from "./decorators";
 
+
 @Injectable()
 class InjectableB {
   public hello() {
@@ -17,6 +18,10 @@ export class InjectableC {
   }
 }
 
+@Injectable()
+class InjectableBandC {
+  constructor(@Inject(InjectableB) b: InjectableB, @Inject(InjectableC) c: InjectableC) { }
+}
 @Controller("/hello")
 export class ControllerA {
   constructor(@Inject(InjectableC) c: InjectableC) {
@@ -25,7 +30,7 @@ export class ControllerA {
 }
 
 @Module({
-  injects: [InjectableB, InjectableC],
+  injects: [InjectableB, InjectableC, InjectableBandC],
   controllers: [ControllerA]
 })
 export class ModuleA {

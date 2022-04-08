@@ -4,10 +4,10 @@ import { Class, DependencyConfig } from "./types";
 
 export function bootstrap() {
   const keys = Array.from(ModuleContainer.entries());
-  console.log(calcDependencyTree(keys.filter(k => k[1].type === "Service").map(k => k[0])));
+  const dependencyTreeResult = calcDependencyTree(keys.filter(k => k[1].type === "Service").map(k => k[0]));
 
-  return keys.filter(([k, v]) => v.type === "Module").forEach(([cls, config]: [Class, IModuleConfig]) => {
-    const instantiateSorted = config.injects.sort((a, b) => (Reflect.getMetadata("DEP", a) ?? []).length - (Reflect.getMetadata("DEP", b) ?? []).length);
+  return keys.filter(([, v]) => v.type === "Module").forEach(([, config]: [Class, IModuleConfig]) => {
+    const instantiateSorted = dependencyTreeResult.loadSequence.map(v => v.cls);
     instantiateSorted.forEach(cls => {
       const deps = Reflect.getMetadata("DEP", cls) as DependencyConfig[] ?? [];
       const args = deps.map(dep => InstanceContainer.get(dep.dep));

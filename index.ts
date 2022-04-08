@@ -22,6 +22,7 @@ export class InjectableC {
 class InjectableBandC {
   constructor(@Inject(InjectableB) b: InjectableB, @Inject(InjectableC) c: InjectableC) { }
 }
+
 @Controller("/hello")
 export class ControllerA {
   constructor(@Inject(InjectableC) c: InjectableC) {

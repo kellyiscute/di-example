@@ -39,7 +39,6 @@ export function calcDependencyTree(classes: Class[]): dependencyTreeResult {
 
     const node: dependencyNode = { cls };
     const deps: DependencyConfig[] = Reflect.getMetadata("DEP", cls) ?? [];
-    console.log(cls, deps)
 
     if (deps.length === 0) {
       tree.push(node);
@@ -66,9 +65,16 @@ export function calcDependencyTree(classes: Class[]): dependencyTreeResult {
   }
   const loadSequence: dependencyNode[] = tree.reduce<dependencyNode[]>((prev, curr) => [...prev, ...getSequence(curr)], []);
 
+  const distinct = new Map<dependencyNode, number>();
+  loadSequence.forEach(seq => distinct.set(seq, loadSequence.lastIndexOf(seq)));
+  const loadSequenceDistinct = new Array<dependencyNode | null>(loadSequence.length).fill(null);
+  for (const node of distinct) {
+    loadSequenceDistinct[node[1]] = node[0];
+  }
+
   return {
     tree,
-    loadSequence,
+    loadSequence: loadSequenceDistinct.filter(v => v !== null),
   };
 }
 

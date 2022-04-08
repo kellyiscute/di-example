@@ -1,5 +1,5 @@
 # di-example
-A simpliest DI(Dependency Injection) example showing how dependency injection how actually works.
+A simpliest DI(Dependency Injection) example showing how dependency injection actually works.
 
 ## How to Run
 1. Install dependency with your favorite package manager. pnpm, yarn, npm etc.
